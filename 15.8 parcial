@@ -1,0 +1,116 @@
+# App de Transporte Intergaláctico de Pasajeros V1
+
+# 1. Listas: Creación y Acceso
+distancias_disponibles = [4.3, 2.7, 1.6, 8.9, 3.5]
+
+# A) Agregar una nueva distancia
+nueva_distancia = float(input("Ingresa una nueva distancia en UA: "))
+distancias_disponibles.append(nueva_distancia)
+
+# B) Mostrar todas las distancias disponibles
+print("\nDistancias disponibles:")
+for distancia in distancias_disponibles:
+    print(f"{distancia} UA")
+
+# 2. Diccionarios: Creación y Acceso
+# A) Diccionario de conductores disponibles
+conductor_disponibles = {
+    "Pedro": ["Marte"],
+    "Clara": ["Júpiter", "Saturno"],
+    "Lucas": ["Mercurio", "Marte"]
+}
+
+# B) Agregar un nuevo conductor
+nuevo_conductor = input("\nIngresa el nombre de un nuevo conductor: ")
+nueva_ruta = input(f"Ingrese la ruta asignada a {nuevo_conductor}: ")
+if nuevo_conductor in conductor_disponibles:
+    conductor_disponibles[nuevo_conductor].append(nueva_ruta)
+else:
+    conductor_disponibles[nuevo_conductor] = [nueva_ruta]
+
+# C) Mostrar conductores y sus rutas
+print("\nConductores disponibles y sus rutas:")
+for conductor, rutas in conductor_disponibles.items():
+    rutas_str = ", ".join(rutas)
+    print(f"{conductor}: {rutas_str}")
+
+# D) Diccionario de pasajeros frecuentes
+pasajeros_frecuentes = {}
+for i in range(4):
+    print(f"\nAgregando pasajero frecuente #{i + 1}")
+    nombre = input("Nombre: ")
+    edad = int(input("Edad: "))
+
+    # Asegurarse de que la residencia sea una distancia válida
+    while True:
+        try:
+            residencia = float(input("Planeta de residencia (en UA): "))
+            break
+        except ValueError:
+            print("Por favor, ingresa una distancia válida en UA (número).")
+
+    ruta_favorita = input("Ruta favorita (nombre del planeta): ")
+    pasajeros_frecuentes[nombre] = {
+        "Edad": edad,
+        "Residencia": residencia,
+        "Ruta Favorita": ruta_favorita
+    }
+
+# Mostrar pasajeros frecuentes
+print("\nPasajeros frecuentes:")
+for nombre, info in pasajeros_frecuentes.items():
+    print(f"{nombre}: {info}")
+
+# 3. Función de verificación de entradas
+def direccion_disponible(lista_distancias, distancia):
+    """Verifica si una distancia está en la lista de distancias disponibles."""
+    return distancia in lista_distancias
+
+# Verificar disponibilidad
+distancia_ua = float(input("\nIngresa una distancia para verificar disponibilidad: "))
+if direccion_disponible(distancias_disponibles, distancia_ua):
+    print("El viaje está confirmado para esa distancia.")
+else:
+    print("No hay transporte disponible para esa distancia.")
+
+# 4. Reserva de un Pasaje
+reservas = []
+
+while True:
+    print("\nNueva Reserva:")
+    nombre_pasajero = input("Nombre del pasajero: ")
+    chofer_asignado = input("Chofer asignado: ")
+
+    # Validación de dirección en UA
+    while True:
+        try:
+            direccion = float(input("Dirección en UA: "))
+            break
+        except ValueError:
+            print("Por favor, ingresa una distancia válida en UA (número).")
+
+    # Verificar disponibilidad de la dirección
+    if not direccion_disponible(distancias_disponibles, direccion):
+        print("No hay servicio disponible para esa distancia. Reserva cancelada.")
+        continue
+
+    # Crear y agregar la reserva
+    una_reserva = {
+        "Nombre": nombre_pasajero,
+        "Chofer": chofer_asignado,
+        "Dirección": direccion
+    }
+    reservas.append(una_reserva)
+    print("Reserva confirmada.")
+
+    # Preguntar si desea continuar
+    continuar = input("¿Deseas agregar otra reserva? (s/n): ").strip().lower()
+    if continuar != 's':
+        print("Proceso de reservas finalizado.")
+        break
+
+# Mostrar el resumen de reservas
+print("\nResumen de Reservas:")
+for i, reserva in enumerate(reservas, 1):
+    print(f"Reserva #{i}: {reserva}")
+
