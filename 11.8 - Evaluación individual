@@ -1,0 +1,103 @@
+import random
+
+# Valores iniciales
+energia = 100
+salud = 80
+experiencia = 0
+nivel = 1
+pocion_usada = False
+manzana_usada = False
+
+# Funciones
+def mensaje_inicial():
+    print("¡Bienvenido al Bosque Encantado! Tu aventura comienza ahora.")
+    if energia >= 50:
+        print("Estás listo para la aventura.")
+    else:
+        print("Necesitas más energía antes de comenzar.")
+
+def verificar_estado():
+    if salud <= 0:
+        return "Aventurero caído."
+    else:
+        return "El aventurero sigue luchando."
+
+def descansar():
+    global energia
+    energia += 20
+    print(f"Descansaste. Energía actual: {energia}")
+
+def pelear(enemigo):
+    global salud, energia
+    if enemigo == "goblin":
+        salud -= 10
+        energia -= 30
+        print("Te enfrentaste a un goblin.")
+    elif enemigo == "troll":
+        salud -= 30
+        energia -= 50
+        print("Te enfrentaste a un troll.")
+    print(verificar_estado())
+
+def usar_objeto(objeto):
+    global salud, energia, pocion_usada, manzana_usada
+    if objeto == "poción de curación":
+        if not pocion_usada:
+            salud += 30
+            pocion_usada = True
+            print("Usaste la poción de curación. Salud actual:", salud)
+        else:
+            print("La poción de curación ya fue usada.")
+    elif objeto == "manzana":
+        if not manzana_usada:
+            energia += 10
+            manzana_usada = True
+            print("Comiste una manzana. Energía actual:", energia)
+        else:
+            print("La manzana ya fue usada.")
+
+def explorar():
+    global experiencia, nivel
+    evento = random.randint(1, 6)
+    if evento == 3:
+        pelear("goblin")
+    elif evento == 5:
+        pelear("troll")
+    else:
+        print("Aventura superada con éxito, ganas 10 exp.")
+        experiencia += 10
+        if experiencia >= 50:
+            experiencia = 0
+            nivel += 1
+            print("¡Subiste de nivel! Nivel actual:", nivel)
+
+# Menú principal
+def menu():
+    global salud, energia, nivel
+    mensaje_inicial()
+    while True:
+        print("\nMenú de Opciones:")
+        print("1. Descansar")
+        print("2. Explorar")
+        print("3. Usar Objeto")
+        print("4. Estado de la partida")
+        print("0. Salir")
+        
+        opcion = input("Elige una opción (0-4): ")
+        if opcion == "1":
+            descansar()
+        elif opcion == "2":
+            explorar()
+        elif opcion == "3":
+            objeto = input("¿Qué objeto deseas usar? (manzana/poción de curación): ").strip().lower()
+            usar_objeto(objeto)
+        elif opcion == "4":
+            print(f"Estado de la partida - Salud: {salud}, Energía: {energia}, Nivel: {nivel}, Experiencia: {experiencia}")
+        elif opcion == "0":
+            print("¡Gracias por jugar! Hasta la próxima aventura.")
+            break
+        else:
+            print("Opción no válida. Intenta de nuevo.")
+
+# Iniciar el juego
+menu()
